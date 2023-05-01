@@ -33,6 +33,7 @@ void Write2SharedMem(Shared_Mem_Block* mem_block, const uint32_t bytes, void (*p
 	for(uint32_t i=0; i<TOTAL_BUFFERS;i++){
 		if(ipi_buffers[i].SHARED_BUFFER_ADDR==mem_block->SHARED_BUFFER_ADDR){
 			MsgBuffer.shmem_header.header.mem_block_idx=i;
+			break;
 		}
 	}
 

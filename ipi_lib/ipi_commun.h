@@ -27,7 +27,6 @@ extern XIpiPsu IpiInst;
 
 	extern XIntc InterruptController; /* Instance of the Interrupt Controller */
 	#define IPI_Cntrlr_ptr &InterruptController
-
 #else
 	#define IPI_CHANNEL_ID	XPAR_XIPIPSU_0_DEVICE_ID
 	#define INTC_DEVICE_ID	XPAR_SCUGIC_0_DEVICE_ID
@@ -56,7 +55,7 @@ extern XIpiPsu IpiInst;
 
 //===================================================================
 
-#define IPI_MSG_SIZE 8 //in 32bit words
+#define IPI_MSG_SIZE 8
 
 typedef struct
 {
@@ -66,12 +65,26 @@ typedef struct
 
 //===================================================================
 
+/*
+ * A IpiHander is a pointer to function that takes a pointer to 
+ * a ipi_msg_t and return TRUE if the message is consumed but
+ * the function (the target of the message match the receiver) 
+ * or FALSE otherwise.
+ * */
 typedef struct
 {
 	int (*IpiHandler)(const ipi_msg_t* MsgBuffer);
 } ipi_hander_wraper_t;
 
-XStatus start_ipi(ipi_hander_wraper_t* p);
+
+/*
+ * Initialize the interprocessor interrup system
+ *
+ * @param *p pointer to a hander which will process the income messages.
+ *
+ * @return TRUE on success FALSE otherwise
+ * */
+XStatus start_ipi(ipi_hander_wraper_t *p);
 
 void Send_ipi_msg(u32 target, ipi_msg_t* ipi_msg_buff);
 
