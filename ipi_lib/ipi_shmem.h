@@ -4,7 +4,11 @@
 #include "ipi_commun.h"
 
 //===================================================================
-
+/*
+ * 
+ *
+ *
+ * */
 typedef struct
 {
 	const uintptr_t SHARED_BUFFER_ADDR;

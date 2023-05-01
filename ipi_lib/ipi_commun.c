@@ -164,7 +164,9 @@ void IpiIntrHandler(void* hander_wpr_ptr)
 	for (u32 SrcIndex = 0U; SrcIndex < IpiInst.Config.TargetCount; SrcIndex++) {
 		if (IpiSrcMask & IpiInst.Config.TargetList[SrcIndex].Mask) {
 			XIpiPsu_ReadMessage(&IpiInst, IpiInst.Config.TargetList[SrcIndex].Mask, (void*)&MsgBuffer,  IPI_MSG_SIZE, XIPIPSU_BUF_TYPE_MSG);
-			if(TRUE==custom_ipi_hander->IpiHandler(&MsgBuffer)){
+
+			if(MsgBuffer.target==XID && MsgBuffer.sender<XTARGET_COUNT){
+				custom_ipi_hander->IpiHandler(&MsgBuffer);
 				XIpiPsu_ClearInterruptStatus(&IpiInst, IpiInst.Config.TargetList[SrcIndex].Mask);
 			}
 		}

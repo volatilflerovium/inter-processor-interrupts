@@ -61,22 +61,19 @@ uint32_t receive_data(void* buffer, uint32_t buffer_size)// size in bytes
 
 //-------------------------------------------------------------------
 
-int ipi_handler(const ipi_msg_t* MsgBuffer)
+void ipi_handler(const ipi_msg_t* MsgBuffer)
 {
 	ipi_msg_2_ipi_shmem_header_u data;
 	data.buff=*MsgBuffer;
 
 	ipi_shmem_header_t* header=&(data.shmem_header.header);
 
-	if(header->target==XID && header->sender<XTARGET_COUNT){
-		xil_printf("ID: %d  target: %d x = x = x = x = x = x = x = x = x = x = sender: %d, offset: %d, words: %d\r\n", XID, header->target, header->sender, header->offset, header->data_length);
+	xil_printf("ID: %d  target: %d x = x = x = x = x = x = x = x = x = x = sender: %d, offset: %d, words: %d\r\n", XID, header->target, header->sender, header->offset, header->data_length);
 
-		Xil_DCacheFlushRange(ipi_buffers[header->mem_block_idx].SHARED_BUFFER_ADDR, ipi_buffers[header->mem_block_idx].BUFFER_LENGTH);
+	Xil_DCacheFlushRange(ipi_buffers[header->mem_block_idx].SHARED_BUFFER_ADDR, ipi_buffers[header->mem_block_idx].BUFFER_LENGTH);
 
-		//xMessageBufferSendFromISR(receiver_buffer, (void*)header, sizeof(ipi_data_header_t), NULL);
-		return TRUE;
-	}
-	return FALSE;
+	//do something with the data
+	//xMessageBufferSendFromISR(receiver_buffer, (void*)header, sizeof(ipi_data_header_t), NULL);
 }
 
 //-------------------------------------------------------------------

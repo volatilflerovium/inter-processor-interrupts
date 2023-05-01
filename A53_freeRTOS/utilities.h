@@ -41,14 +41,14 @@ int sys_new_task( const char *pcName, void( *pxThread )( void *pvParameters ), v
 
 uint32_t receive_data(void* buffer, uint32_t size);
 
-int ipi_shmem_handler(const ipi_msg_t* MsgBuffer);
+void ipi_shmem_handler(const ipi_msg_t* msg);
 
 void wake_up2(void* p, uint32_t words);
 
 //-------------------------------------------------------------------
 
 // for testing
-void PingPongTest(const ipi_msg_t* MsgBuffer);
+void PingPongTest(const ipi_msg_t* msg);
 void populate_mem(void* mem_p, uint32_t bytes);
 void print_mem_data(void* p, uint32_t words);
 

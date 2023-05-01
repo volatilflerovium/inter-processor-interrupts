@@ -57,23 +57,25 @@ extern XIpiPsu IpiInst;
 
 #define IPI_MSG_SIZE 8
 
+/*
+ * For this setup, we are sending messages of 8 words.
+ * */
 typedef struct
 {
-	uint32_t buff[IPI_MSG_SIZE];
+	uint32_t sender		:16;
+	uint32_t target		:16;
+	uint32_t buff[IPI_MSG_SIZE-1];
 } ipi_msg_t;
-
 
 //===================================================================
 
 /*
  * A IpiHander is a pointer to function that takes a pointer to 
- * a ipi_msg_t and return TRUE if the message is consumed but
- * the function (the target of the message match the receiver) 
- * or FALSE otherwise.
+ * a ipi_shmem_header_t.
  * */
 typedef struct
 {
-	int (*IpiHandler)(const ipi_msg_t* MsgBuffer);
+	void (*IpiHandler)(const ipi_msg_t* header);
 } ipi_hander_wraper_t;
 
 

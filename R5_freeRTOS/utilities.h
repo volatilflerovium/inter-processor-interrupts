@@ -41,7 +41,7 @@ int sys_new_task( const char *pcName, void( *pxThread )( void *pvParameters ), v
 
 uint32_t receive_data(void* buffer, uint32_t size);
 
-int ipi_handler(const ipi_msg_t* MsgBuffer);
+void ipi_handler(const ipi_msg_t* MsgBuffer);
 
 void start_ipi_thread(void* p);
 

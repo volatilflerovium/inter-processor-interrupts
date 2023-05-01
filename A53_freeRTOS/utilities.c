@@ -58,34 +58,28 @@ uint32_t receive_data(void* buffer, uint32_t buffer_size)// size in bytes
 }
 
 //-------------------------------------------------------------------
-
-int ipi_shmem_handler(const ipi_msg_t* MsgBuffer)
+/*
+ * For this example, we only push the received data into
+ * a message buffer to be consumed by any other process.
+ * */
+void ipi_shmem_handler(const ipi_msg_t* msg)
 {
 	ipi_msg_2_ipi_shmem_header_u data;
-	data.buff=*MsgBuffer;
+	data.buff=*msg;
 
 	ipi_shmem_header_t* header=&(data.shmem_header.header);
+	xil_printf("ID: %d  target: %d x = x = x = x = x = x = x = x = x = x = sender: %d, offset: %d, words: %d\r\n", XID, header->target, header->sender, header->offset, header->data_length);
 
-	if(header->target==XID && header->sender<XTARGET_COUNT){
-		xil_printf("ID: %d  target: %d x = x = x = x = x = x = x = x = x = x = sender: %d, offset: %d, words: %d\r\n", XID, header->target, header->sender, header->offset, header->data_length);
+	Xil_DCacheFlushRange(ipi_buffers[header->mem_block_idx].SHARED_BUFFER_ADDR, ipi_buffers[header->mem_block_idx].BUFFER_LENGTH);
 
-		//Xil_DCacheFlushRange(ipi_buffers[header->mem_block_idx].SHARED_BUFFER_ADDR, ipi_buffers[header->mem_block_idx].BUFFER_LENGTH);
-
-		xMessageBufferSendFromISR(receiver_buffer, (void*)header, sizeof(ipi_shmem_header_t), NULL);
-		return TRUE;
-	}
-	return FALSE;
+	xMessageBufferSendFromISR(receiver_buffer, (void*)header, sizeof(ipi_shmem_header_t), NULL);
 }
 
 
 //-------------------------------------------------------------------
 
-void PingPongTest(const ipi_msg_t* MsgBuffer)
+void PingPongTest(const ipi_msg_t* msg)
 {
-	ipi_msg_2_ipi_shmem_header_u data;
-	data.buff=*MsgBuffer;
-
-	ipi_shmem_header_t* header=&(data.shmem_header.header);
 	//xil_printf("bytes: %d\r\n",  MsgBuffer->data_length);
 
 	//print_mem_data((void*)MsgBuffer->addr, MsgBuffer->data_length);

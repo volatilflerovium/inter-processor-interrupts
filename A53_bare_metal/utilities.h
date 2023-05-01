@@ -29,7 +29,7 @@ uint32_t receive_data(void* buffer, uint32_t size);
 //-------------------------------------------------------------------
 
 // for testing
-int PingPongTest(const ipi_msg_t* MsgBuffer);
+void PingPongTest(const ipi_msg_t* MsgBuffer);
 void populate_mem(void* mem_p, uint32_t bytes);
 void print_mem_data(void* p, uint32_t bytes);
 
