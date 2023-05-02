@@ -50,7 +50,7 @@ void Write2SharedMem(Shared_Mem_Block* mem_block, const uint32_t bytes, void (*p
 
 //===================================================================
 
-void WriteBuff2SharedMem(Shared_Mem_Block* mem_block, void *p, uint32_t bytes)
+void WriteBuff2SharedMem(Shared_Mem_Block* mem_block, void *src_buff, uint32_t bytes)
 {
 	uint32_t data_size=bytes<mem_block->BUFFER_LENGTH ? bytes : mem_block->BUFFER_LENGTH;
 
@@ -74,7 +74,7 @@ void WriteBuff2SharedMem(Shared_Mem_Block* mem_block, void *p, uint32_t bytes)
 	uint32_t round_to_words=WORD32_SIZE*((data_size+WORD32_SIZE-1)/WORD32_SIZE);
 	mem_block->head+=round_to_words;// reserve space for the current writing, so another process can write after the current data in written
 
-	memcpy((void*)addr, p, data_size);
+	memcpy((void*)addr, src_buff, data_size);
 
 	Xil_DCacheFlushRange(mem_block->SHARED_BUFFER_ADDR, mem_block->BUFFER_LENGTH);
 

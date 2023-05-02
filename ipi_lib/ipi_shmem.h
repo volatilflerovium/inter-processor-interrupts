@@ -5,16 +5,19 @@
 
 //===================================================================
 /*
- * 
- *
+ * Passing data via shared memory is achieved using dedicated memory
+ * blocks. 
+ * If you want processor P1 to send data via shared memory to processor P2
+ * you need to setup a dedicated memory block. This block
+ * is not the same if P2 want to send data to P1 via shared memory. 
  *
  * */
 typedef struct
 {
-	const uintptr_t SHARED_BUFFER_ADDR;
-	const uint32_t BUFFER_LENGTH;	// in bytes
-	uint32_t head;
-	uint32_t target_idx;
+	const uintptr_t SHARED_BUFFER_ADDR; // base address for the block
+	const uint32_t BUFFER_LENGTH;	    // length of the block in bytes
+	uint32_t head;                      // current available position in the block
+	uint32_t target_idx;                // the index of the current block in the array ipi_buffers (see shared_memory_setup.h)
 } Shared_Mem_Block;
 
 //===================================================================
@@ -46,29 +49,48 @@ typedef union
 //===================================================================
 
 /*
- *	Copy the data from the respective shared memory address into 
+ * Copy the data from the respective shared memory block into 
  * a buffer.
  * 
  * @param buffer	destination buffer to copy the data to
  * @param buffer_size the size (in bytes) of the buffer
- */
+ *
+ * */
 uint32_t CopyMem2Buffer(ipi_shmem_header_t* MsgBuffer, void* buffer, uint32_t buffer_size);
 
 
 /*
+ * Write data into a specific memory block using a callback function. 
+ * After the data is written, it trigger the ipi system.
  *
- * @param words number of words expected to be written to shared memory. Internally, if its value
- *        is less than the maximum value allowed, is fed into as the second argument for @param populate_mem
- *         parameter.
+ * @param mem_block pointer to a Shared_Mem_Block where data will be written.
  *
- * @param pupulate_memory pointer to function which takes two parameters, a pointer to
+ * @param words number of words expected to be written to shared memory. 
+ * Internally, if its value is less than the maximum value allowed, 
+ * it is passed as the second argument for the callback function.
+ *
+ * @param pupulate_memory pointer to a callback which takes two parameters, a pointer to
  *        the memory location to write to and the number of words to be written.
  *
- */
+ * */
 
 void Write2SharedMem(Shared_Mem_Block* mem_block, const uint32_t words, void (*populate_mem)(void *p, uint32_t words));
 
-void WriteBuff2SharedMem(Shared_Mem_Block* mem_block, void *p, uint32_t words);
+
+/*
+ * Write data from a specific buffer into a specific memory block. 
+ * After the data is written, it trigger the ipi system.
+ *
+ * @param mem_block pointer to a Shared_Mem_Block where data will be written.
+ *
+ * @param src_buff pointer to the buffer that contains the data to be copy.
+ *
+ * @param words number of words expected to be written to shared memory. 
+ * Internally, if its value is less than the maximum value allowed, 
+ * it is passed as the second argument for the callback function.
+ *
+ * */
+void WriteBuff2SharedMem(Shared_Mem_Block* mem_block, void *src_buff, uint32_t words);
 
 //===================================================================
 
@@ -81,6 +103,12 @@ typedef struct
 	const uint32_t data_length; //in bytes
 	uintptr_t const addr;
 } allocated_mem_t;
+
+/*
+ * It allocates memory in a specific shared memory block.
+ *
+ * @return details of the 
+ * */
 
 allocated_mem_t GetAllocatedBuffer(Shared_Mem_Block* mem_block, uint32_t buffer_size);
 
