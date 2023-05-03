@@ -6,7 +6,7 @@
 
 //===================================================================
 /*
- *
+ * 
  *
  *
  *
@@ -28,9 +28,9 @@ extern Shared_Mem_Block ipi_buffers[TOTAL_BUFFERS];
 //===================================================================
 
 #ifdef ARM_A53_0
-	//#define TO_A531_BUFF ipi_buffers[A530_TO_A531]
+	//A53_0 is not passing data via shared memory
 #elif defined ARM_A53_1
-	//#define TO_R50 A531_TO_R50
+	//A53_1 is not passing data via shared memory
 #elif defined ARM_R5_0
 	#define TO_A530 R50_TO_A530
 	#define TO_A531 R50_TO_A531

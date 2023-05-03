@@ -6,7 +6,7 @@
  * Notice that all the A53 processors share the same IPI, 
  * this means that XPAR_XIPIPS_TARGET_PSU_CORTEXA53_0_CH0_MASK, ...,
  * XPAR_XIPIPS_TARGET_PSU_CORTEXA53_3_CH0_MASK
- * are all the same by definition
+ * have the same value.
  *
  */
 const u32 XIPI_TARGETS[XTARGET_COUNT]={

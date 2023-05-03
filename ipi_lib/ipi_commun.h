@@ -59,7 +59,12 @@ extern XIpiPsu IpiInst;
 
 /*
  * For this setup, we are sending messages of 8 words.
+ * 
+ * We use the first word to register the index in the array XIPI_TARGETS 
+ * of the sender and the target processors.
+ *
  * */
+
 typedef struct
 {
 	uint32_t sender		:16;
@@ -82,15 +87,35 @@ typedef struct
 /*
  * Initialize the interprocessor interrup system
  *
- * @param *p pointer to a hander which will process the income messages.
+ * @param *p pointer to a hander which will process income messages.
  *
  * @return TRUE on success FALSE otherwise
+ *
  * */
+
 XStatus start_ipi(ipi_hander_wraper_t *p);
 
-void Send_ipi_msg(u32 target, ipi_msg_t* ipi_msg_buff);
+/*
+ * Send a message to the target processor via XIPIPSU_BUF_TYPE_MSG
+ *
+ * @param xipi_target the IPI of the destination processor
+ *
+ * @param msg_buff message to be sent.
+ * 
+ * */
 
-void Send_ipi_resp(u32 target, ipi_msg_t* ipi_msg_buff);
+void Send_ipi_msg(u32 xipi_target, ipi_msg_t* msg_buff);
+
+/*
+ * Send a message to the target processor via XIPIPSU_BUF_TYPE_RESP
+ *
+ * @param xipi_target the IPI of the destination processor
+ *
+ * @param msg_buff message to be sent.
+ * 
+ * */
+
+void Send_ipi_resp(u32 xipi_target, ipi_msg_t* msg_buff);
 
 //===================================================================
 

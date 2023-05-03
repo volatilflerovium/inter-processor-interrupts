@@ -175,18 +175,18 @@ void IpiIntrHandler(void* hander_wpr_ptr)
 
 //===================================================================
 
-void Send_ipi_msg(u32 target, ipi_msg_t* ipi_msg_buff)
+void Send_ipi_msg(u32 xipi_target, ipi_msg_t* msg_buff)
 {
-	XIpiPsu_WriteMessage(&IpiInst, target, (void*)ipi_msg_buff, IPI_MSG_SIZE, XIPIPSU_BUF_TYPE_MSG);
-	XIpiPsu_TriggerIpi(&IpiInst, target);
+	XIpiPsu_WriteMessage(&IpiInst, xipi_target, (void*)msg_buff, IPI_MSG_SIZE, XIPIPSU_BUF_TYPE_MSG);
+	XIpiPsu_TriggerIpi(&IpiInst, xipi_target);
 }
 
 //===================================================================
 
-void Send_ipi_resp(u32 target, ipi_msg_t* ipi_msg_buff)
+void Send_ipi_resp(u32 xipi_target, ipi_msg_t* msg_buff)
 {
-	XIpiPsu_WriteMessage(&IpiInst, target, (void*)ipi_msg_buff, IPI_MSG_SIZE, XIPIPSU_BUF_TYPE_RESP);
-	XIpiPsu_TriggerIpi(&IpiInst, target);
+	XIpiPsu_WriteMessage(&IpiInst, xipi_target, (void*)msg_buff, IPI_MSG_SIZE, XIPIPSU_BUF_TYPE_RESP);
+	XIpiPsu_TriggerIpi(&IpiInst, xipi_target);
 }
 
 //===================================================================

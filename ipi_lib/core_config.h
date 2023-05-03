@@ -9,10 +9,21 @@
 
 //===================================================================
 /*
+ * For each processor in the system we define a preprocessor macro
+ * using the -D option flag. 
+
+ * So, this example our system has 2 A53, 1 R5 and 1 microBlazefor, derefore
+ * we define:
+ *
+ * in the A53_0 macro: ARM_A53_0 
+ * in the A53_1 macro: ARM_A53_1
+ * in the R5_0 macro: ARM_R5_0
+ * and in the microblaze macro MICROBLAZE
+ *
  * We enumerate all the processors in the system which we want
  * to exchange messages. This will help us to identify the actual
  * 
- * In this example our system has 2 A53, 1 R5 and 1 microBlaze.
+ * 
  *
  * */
 
@@ -26,8 +37,8 @@ enum XIPI_CORE_TARGETS
 };
 
 /*
- * We put all the IPI targets for the system in a array.
- * And we put this targets in the same order described by XIPI_CORE_TARGETS
+ * We put all the IPI targets for the system in a array in the same
+ * order as described by XIPI_CORE_TARGETS
  *
  * */
 
@@ -36,7 +47,8 @@ extern const u32 XIPI_TARGETS[XTARGET_COUNT];
 //===================================================================
 
 /*
- * We capture the index in XIPI_TARGETS for the current processor.
+ * We capture the index of the IPI for the current processor in 
+ * the array XIPI_TARGETS.
  *
  * */
 

@@ -19,6 +19,7 @@ other freeRTOS), 1 R5 (running freeRTOS) and 1 microblaze (running baremetal).
 
 The directory ipi_lib needs to be shared across all the cores.
 
+# 
 Notice that despite the four A53 share the same IPI, our implementation
 is able to route messages to a specific A53 core.
 

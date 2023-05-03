@@ -7,30 +7,36 @@
 /*
  * Passing data via shared memory is achieved using dedicated memory
  * blocks. 
- * If you want processor P1 to send data via shared memory to processor P2
- * you need to setup a dedicated memory block. This block
- * is not the same if P2 want to send data to P1 via shared memory. 
+ * If we want processor P1 to send data via shared memory to processor P2
+ * you we to setup a dedicated memory block where P1 will write to
+ * and P2 will read from. This block is not the same if P2 want to send
+ * data to P1 via shared memory. 
+ *
+ * These blocks are implemented as circular buffer.
  *
  * */
+
 typedef struct
 {
 	const uintptr_t SHARED_BUFFER_ADDR; // base address for the block
 	const uint32_t BUFFER_LENGTH;	    // length of the block in bytes
 	uint32_t head;                      // current available position in the block
-	uint32_t target_idx;                // the index of the current block in the array ipi_buffers (see shared_memory_setup.h)
+	uint32_t target_idx;                // the enumeration (enum XIPI_CORE_TARGETS) value for the target processor  
 } Shared_Mem_Block;
 
 //===================================================================
 
 typedef struct
 {
-	uint32_t sender		:16;
-	uint32_t target		:16;
-	uint32_t mem_block_idx;
-	uint32_t offset;
-	uint32_t data_length; //in bytes
+	uint32_t sender		:16; // the enumeration (enum XIPI_CORE_TARGETS) value for the sender processor
+	uint32_t target		:16; // the enumeration (enum XIPI_CORE_TARGETS) value for the target processor
+	uint32_t mem_block_idx;  // the enumeration (enum MEM_INDEX) value for memory block where data is written
+	uint32_t offset;         // position in the memory block where data start
+	uint32_t data_length;    // length (in bytes) of the data 
+	uint32_t padding[IPI_MSG_SIZE-4]; // 4 is for 4 words used by the other data members of this structure    
 } ipi_shmem_header_t;
 
+/*
 #define IPI_SHMEM_HEADER_SIZE ((WORD32_SIZE-1)+sizeof(ipi_shmem_header_t))/WORD32_SIZE // words
 
 typedef struct
@@ -38,12 +44,12 @@ typedef struct
 	ipi_shmem_header_t header;
 	uint32_t padding[IPI_MSG_SIZE-IPI_SHMEM_HEADER_SIZE];
 } ipi_shmem_adapter_t;
-
+*/
 
 typedef union
 {
 	ipi_msg_t buff;
-	ipi_shmem_adapter_t shmem_header;
+	ipi_shmem_header_t shmem_header;
 } ipi_msg_2_ipi_shmem_header_u;
 
 //===================================================================
@@ -105,13 +111,24 @@ typedef struct
 } allocated_mem_t;
 
 /*
- * It allocates memory in a specific shared memory block.
+ * It reserves memory in a specific shared memory block.
  *
- * @return details of the 
+ * @param mem_block a pointer to the specific Shared_Mem_block struct
+ *        where we want to reserve memory.
+ *
+ * @param buffer_size the size of the block of reserve memory.
+ *
+ * @return it return a structure containing details of the memory block.
+ *         When the reserve memory is populated, we need this structure
+ *         in order to send the respective message.  
  * */
 
 allocated_mem_t GetAllocatedBuffer(Shared_Mem_Block* mem_block, uint32_t buffer_size);
 
+/*
+ * 
+ *
+ * */
 void SendBuffer(allocated_mem_t* mem);
 
 typedef struct
