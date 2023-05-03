@@ -23,8 +23,6 @@
  * We enumerate all the processors in the system which we want
  * to exchange messages. This will help us to identify the actual
  * 
- * 
- *
  * */
 
 enum XIPI_CORE_TARGETS

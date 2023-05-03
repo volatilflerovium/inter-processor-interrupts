@@ -5,14 +5,20 @@
 #include "ipi_shmem.h"
 
 //===================================================================
+
 /*
- * 
+ * If we want processor P1 to send data via shared memory to processor P2
+ * you we to setup a dedicated memory block where P1 will write to
+ * and P2 will read from. This block is not the same if P2 want to send
+ * data to P1 via shared memory. For the sake of the argument, let's
+ * call each of these pairs a channel. 
  *
- *
- *
+ * Therefore we define an enumeration with all the channels that our
+ * system requires. We use this enumeration to index the array of
+ * Share_Mem_Block's 
  *
  * */
-// All the buffers across all the platforms running on the board
+
 enum MEM_INDEX
 {
 	R50_TO_A530,
@@ -26,6 +32,11 @@ enum MEM_INDEX
 extern Shared_Mem_Block ipi_buffers[TOTAL_BUFFERS];
 
 //===================================================================
+
+/*
+ * Further simplification
+ *
+ * */
 
 #ifdef ARM_A53_0
 	//A53_0 is not passing data via shared memory

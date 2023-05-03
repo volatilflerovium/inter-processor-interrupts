@@ -7,10 +7,7 @@
 /*
  * Passing data via shared memory is achieved using dedicated memory
  * blocks. 
- * If we want processor P1 to send data via shared memory to processor P2
- * you we to setup a dedicated memory block where P1 will write to
- * and P2 will read from. This block is not the same if P2 want to send
- * data to P1 via shared memory. 
+
  *
  * These blocks are implemented as circular buffer.
  *
@@ -21,7 +18,7 @@ typedef struct
 	const uintptr_t SHARED_BUFFER_ADDR; // base address for the block
 	const uint32_t BUFFER_LENGTH;	    // length of the block in bytes
 	uint32_t head;                      // current available position in the block
-	uint32_t target_idx;                // the enumeration (enum XIPI_CORE_TARGETS) value for the target processor  
+	const uint32_t target_idx;                // the enumeration (enum XIPI_CORE_TARGETS) value for the target processor  
 } Shared_Mem_Block;
 
 //===================================================================

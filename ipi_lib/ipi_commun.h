@@ -77,6 +77,7 @@ typedef struct
 /*
  * A IpiHander is a pointer to function that takes a pointer to 
  * a ipi_shmem_header_t.
+ *
  * */
 typedef struct
 {

@@ -19,7 +19,67 @@ other freeRTOS), 1 R5 (running freeRTOS) and 1 microblaze (running baremetal).
 
 The directory ipi_lib needs to be shared across all the cores.
 
-# 
+Code for each processor is located in respective directory.
+
+# Setup
+
+ For each processor in the system we define a preprocessor macro using the -D option flag. 
+ [image]
+
+ So, in this example our system has 2 A53, 1 R5 and 1 microBlazefor, therefore we define:
+ 
+ in processor A53_0 macro: ARM_A53_0 
+ in processor A53_1 macro: ARM_A53_1
+ in processor R5_0 macro: ARM_R5_0
+ and in the microblaze macro MICROBLAZE
+
+ We define a enumeration 
+
+    enum XIPI_CORE_TARGETS
+    {
+		A53_0=0,
+		A53_1,
+		R5_0,
+		MBLAZE,
+		XTARGET_COUNT
+    };
+
+and we used this enumeration to index an array that contains IPI's of 
+the system
+
+    const u32 XIPI_TARGETS[XTARGET_COUNT];
+
+Finally, using the macros, we capture the index of the IPI for the current
+processor in the array XIPI_TARGETS:
+
+	#ifdef ARM_A53_0
+		#define XID A53_0
+	#elif defined ARM_A53_1
+		#define XID A53_1
+	#elif defined ARM_R5_0
+		#define XID R5_0
+	#elif defined MICROBLAZE
+	    #define XID MBLAZE
+    #endif
+
+
+For this setup, we are sending messages of 8 words in the format of the
+following structure:
+
+	typedef struct
+	{
+		uint32_t sender		:16;
+		uint32_t target		:16;
+		uint32_t buff[7];
+	} ipi_msg_t;
+
+We use the first word to register the index in the array XIPI_TARGETS 
+of the sender and the index of the target processor.
+
+(unfinished...)
+
+# Notes
+
 Notice that despite the four A53 share the same IPI, our implementation
 is able to route messages to a specific A53 core.
 

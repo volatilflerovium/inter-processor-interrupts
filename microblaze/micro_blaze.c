@@ -27,8 +27,6 @@ int main()
 	ipi_hander_wraper_t reader={.IpiHandler=PingPongTest};
 	start_ipi(&reader);
 
-	//Write2SharedMem(32, populate_mem);
-
     while (1) {
     	//Write2SharedMem(&ipi_buffers[TO_R51], WORD32_SIZE*32, populate_mem);
 
