@@ -26,12 +26,18 @@ Code for each processor is located in respective directory.
 Vivado IPI master mapping:
 [![image41.png](https://i.postimg.cc/NGkdMpZr/image41.png)](https://postimg.cc/hhhLZbDS)
 
+Memory region setup:
+
+for A53_0
 [![A53_0](https://i.postimg.cc/Y0FGvnCL/A53-0.png)](https://postimg.cc/QKXxPq5j)
 
+for A53_1
 [![A53_1](https://i.postimg.cc/y8sgNT4W/A53-1.png)](https://postimg.cc/xcpTxMdS)
 
+for R5_0
 [![R5_0](https://i.postimg.cc/BvwXM981/R5-0.png)](https://postimg.cc/R3KSZYLM)
 
+for microBlaze
 [![MicroBlaze](https://i.postimg.cc/x8GjrWd5/MBZ.png)](https://postimg.cc/BP6fH7HP)
 
 
