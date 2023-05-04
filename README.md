@@ -23,8 +23,20 @@ Code for each processor is located in respective directory.
 
 # Setup
 
- For each processor in the system we define a preprocessor macro using the -D option flag. 
- [image]
+Vivado IPI master mapping:
+[![image41.png](https://i.postimg.cc/NGkdMpZr/image41.png)](https://postimg.cc/hhhLZbDS)
+
+[![A53_0](https://i.postimg.cc/Y0FGvnCL/A53-0.png)](https://postimg.cc/QKXxPq5j)
+
+[![A53_1](https://i.postimg.cc/y8sgNT4W/A53-1.png)](https://postimg.cc/xcpTxMdS)
+
+[![R5_0](https://i.postimg.cc/BvwXM981/R5-0.png)](https://postimg.cc/R3KSZYLM)
+
+[![MicroBlaze](https://i.postimg.cc/x8GjrWd5/MBZ.png)](https://postimg.cc/BP6fH7HP)
+
+
+ For each processor in the system we define a preprocessor macro using the -D option flag 
+[![d-symbol](https://i.postimg.cc/fTVrkxs7/d-symbol.png)](https://postimg.cc/6yN0m4yT)
 
  So, in this example our system has 2 A53, 1 R5 and 1 microBlazefor, therefore we define:
  
