@@ -322,7 +322,7 @@ In baremetal
 		start_ipi(&reader);
 
 	    while (1) {
-    		//Write2SharedMem(&ipi_buffers[TO_R51], WORD32_SIZE*32, populate_mem);
+    		Write2SharedMem(&ipi_buffers[TO_R51], WORD32_SIZE*32, populate_mem);
 
     		sleep(1);
     	};
@@ -338,4 +338,6 @@ See directory microblaze for the definition of the functions used.
 
 Notice that despite the four A53 share the same IPI, our implementation
 is able to route messages to a specific A53 core.
+
+
 
