@@ -26,7 +26,7 @@ int main()
 	start_ipi(&reader);
 
 	while (1) {
-    	//Write2SharedMem(&ipi_buffers[TO_R51], WORD32_SIZE*32, populate_mem);
+    	Write2SharedMem(&ipi_buffers[TO_R51], WORD32_SIZE*32, populate_mem);
 
     	//xil_printf("in A53_1...\r\n");
     	sleep(2.5);

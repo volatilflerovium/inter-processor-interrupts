@@ -187,6 +187,32 @@ So in shared_memory_setup.h, ipi_buffers is
 
 # Library
 
+The function that will consume the message from another processor is
+wrapped in a structure:
+
+	/*
+	 * A IpiHander is a pointer to function that takes a pointer to 
+	 * a ipi_shmem_header_t.
+	 *
+	 * */
+	typedef struct
+	{
+		void (*IpiHandler)(const ipi_msg_t* header);
+	} ipi_hander_wraper_t;
+
+
+	/*
+	 * Initialize the interprocessor interrup system
+	 *
+	 * @param *p pointer to a hander which will process income messages.
+	 *
+	 * @return TRUE on success FALSE otherwise
+	 *
+	 * */
+
+	XStatus start_ipi(ipi_hander_wraper_t *p);
+
+
 	/*
 	 * Copy the data from the respective shared memory block into a buffer.
 	 * 
@@ -198,41 +224,41 @@ So in shared_memory_setup.h, ipi_buffers is
     uint32_t CopyMem2Buffer(ipi_shmem_header_t* MsgBuffer, void* buffer, uint32_t buffer_size);
 
 
-/*
- * Write data into a specific memory block using a callback function. 
- * After the data is written, it trigger the ipi system.
- *
- * @param mem_block pointer to a Shared_Mem_Block where data will be written.
- *
- * @param words number of words expected to be written to shared memory. 
- * Internally, if its value is less than the maximum value allowed, 
- * it is passed as the second argument for the callback function.
- *
- * @param pupulate_memory pointer to a callback which takes two parameters, a pointer to
- *        the memory location to write to and the number of words to be written.
- *
- * */
+	/*
+	 * Write data into a specific memory block using a callback function. 
+	 * After the data is written, it trigger the ipi system.
+	 *
+	 * @param mem_block pointer to a Shared_Mem_Block where data will be written.
+	 *
+	 * @param words number of words expected to be written to shared memory. 
+	 * Internally, if its value is less than the maximum value allowed, 
+	 * it is passed as the second argument for the callback function.
+	 *
+	 * @param pupulate_memory pointer to a callback which takes two parameters, a pointer to
+	 *        the memory location to write to and the number of words to be written.
+	 *
+	 * */
 
     void Write2SharedMem(Shared_Mem_Block* mem_block, const uint32_t words, void (*populate_mem)(void *p, uint32_t words));
 
 
-/*
- * Write data from a specific buffer into a specific memory block. 
- * After the data is written, it trigger the ipi system.
- *
- * @param mem_block pointer to a Shared_Mem_Block where data will be written.
- *
- * @param src_buff pointer to the buffer that contains the data to be copy.
- *
- * @param words number of words expected to be written to shared memory. 
- * Internally, if its value is less than the maximum value allowed, 
- * it is passed as the second argument for the callback function.
- *
- * */
+	/*
+	 * Write data from a specific buffer into a specific memory block. 
+	 * After the data is written, it trigger the ipi system.
+	 *
+	 * @param mem_block pointer to a Shared_Mem_Block where data will be written.
+	 *
+	 * @param src_buff pointer to the buffer that contains the data to be copy.
+	 *
+	 * @param words number of words expected to be written to shared memory. 
+	 * Internally, if its value is less than the maximum value allowed, 
+	 * it is passed as the second argument for the callback function.
+	 *
+	 * */
 
     void WriteBuff2SharedMem(Shared_Mem_Block* mem_block, void *src_buff, uint32_t words);
 
-//===================================================================
+We define
 
 	typedef struct
 	{
@@ -244,33 +270,33 @@ So in shared_memory_setup.h, ipi_buffers is
 		uintptr_t const addr;
 	} allocated_mem_t;
 
-/*
- * It reserves memory in a specific shared memory block.
- *
- * @param mem_block a pointer to the specific Shared_Mem_block struct
- *        where we want to reserve memory.
- *
- * @param buffer_size the size of the block of reserve memory.
- *
- * @return it return a structure containing details of the memory block.
- *         When the reserve memory is populated, we need this structure
- *         in order to send the respective message.
- * */
+	/*
+	 * It reserves memory in a specific shared memory block.
+	 *
+	 * @param mem_block a pointer to the specific Shared_Mem_block struct
+	 *        where we want to reserve memory.
+	 *
+	 * @param buffer_size the size of the block of reserve memory.
+	 *
+	 * @return it return a structure containing details of the memory block.
+	 *         When the reserve memory is populated, we need this structure
+	 *         in order to send the respective message.
+	 * */
 
 	allocated_mem_t GetAllocatedBuffer(Shared_Mem_Block* mem_block, uint32_t buffer_size);
 
-/*
- * After the allocated memory is populated it can be sent
- *
- * */
+	/*
+	 * After the allocated memory is populated it can be sent
+	 *
+	 * */
 
 	void SendBuffer(allocated_mem_t* mem);
 
-/*
- * To get a pointer to the memory where the received data start
- * we can use
- *
- * */
+	/*
+	 * To get a pointer to the memory where the received data start
+	 * we can use
+	 *
+	 * */
 
 	buffer_data_t GetBufferData(ipi_shmem_header_t* MsgBuffer);
 
@@ -282,6 +308,31 @@ which return a structure:
 		const uint32_t data_length;
 	} buffer_data_t;
 
+# Example
+
+In baremetal
+
+	int main()
+	{
+	    init_platform();
+	
+		xil_printf("Test IPI Demo on %s\r\n", SENDER);
+
+		ipi_hander_wraper_t reader={.IpiHandler=PingPongTest};
+		start_ipi(&reader);
+
+	    while (1) {
+    		//Write2SharedMem(&ipi_buffers[TO_R51], WORD32_SIZE*32, populate_mem);
+
+    		sleep(1);
+    	};
+
+	    cleanup_platform();
+
+	    return 0;
+	}
+
+See directory microblaze for the definition of the functions used.
 
 # Notes
 
