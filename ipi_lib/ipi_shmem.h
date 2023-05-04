@@ -7,7 +7,6 @@
 /*
  * Passing data via shared memory is achieved using dedicated memory
  * blocks. 
-
  *
  * These blocks are implemented as circular buffer.
  *
@@ -18,7 +17,7 @@ typedef struct
 	const uintptr_t SHARED_BUFFER_ADDR; // base address for the block
 	const uint32_t BUFFER_LENGTH;	    // length of the block in bytes
 	uint32_t head;                      // current available position in the block
-	const uint32_t target_idx;                // the enumeration (enum XIPI_CORE_TARGETS) value for the target processor  
+	const uint32_t target_idx;          // the enumeration (enum XIPI_CORE_TARGETS) value for the target processor  
 } Shared_Mem_Block;
 
 //===================================================================

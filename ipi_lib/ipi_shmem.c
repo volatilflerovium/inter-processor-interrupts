@@ -45,7 +45,7 @@ void Write2SharedMem(Shared_Mem_Block* mem_block, const uint32_t bytes, void (*p
 	xil_printf("SENDER ID: %d\r\n", MsgBuffer.shmem_header.sender);
 	Xil_DCacheFlushRange(mem_block->SHARED_BUFFER_ADDR, mem_block->BUFFER_LENGTH);
 
-	Send_ipi_msg(XIPI_TARGETS[mem_block->target_idx], &MsgBuffer.buff);
+	Send_ipi_msg(&MsgBuffer.buff);
 }
 
 //===================================================================
@@ -78,7 +78,7 @@ void WriteBuff2SharedMem(Shared_Mem_Block* mem_block, void *src_buff, uint32_t b
 
 	Xil_DCacheFlushRange(mem_block->SHARED_BUFFER_ADDR, mem_block->BUFFER_LENGTH);
 
-	Send_ipi_msg(XIPI_TARGETS[mem_block->target_idx], &MsgBuffer.buff);
+	Send_ipi_msg(&MsgBuffer.buff);
 }
 
 //===================================================================
@@ -122,7 +122,7 @@ void SendBuffer(allocated_mem_t* data)
 	MsgBuffer.shmem_header.data_length=data->data_length;
 
 	Xil_DCacheFlushRange(ipi_buffers[data->mem_block_idx].SHARED_BUFFER_ADDR, ipi_buffers[data->mem_block_idx].BUFFER_LENGTH);
-	Send_ipi_msg(XIPI_TARGETS[data->target], &MsgBuffer.buff);
+	Send_ipi_msg(&MsgBuffer.buff);
 }
 
 //===================================================================

@@ -99,24 +99,20 @@ XStatus start_ipi(ipi_hander_wraper_t *p);
 /*
  * Send a message to the target processor via XIPIPSU_BUF_TYPE_MSG
  *
- * @param xipi_target the IPI of the destination processor
- *
  * @param msg_buff message to be sent.
  * 
  * */
 
-void Send_ipi_msg(u32 xipi_target, ipi_msg_t* msg_buff);
+void Send_ipi_msg(ipi_msg_t* msg_buff);
 
 /*
  * Send a message to the target processor via XIPIPSU_BUF_TYPE_RESP
  *
- * @param xipi_target the IPI of the destination processor
- *
  * @param msg_buff message to be sent.
  * 
  * */
 
-void Send_ipi_resp(u32 xipi_target, ipi_msg_t* msg_buff);
+void Send_ipi_resp(ipi_msg_t* msg_buff);
 
 //===================================================================
 
