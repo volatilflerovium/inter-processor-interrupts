@@ -187,14 +187,13 @@ So in shared_memory_setup.h, ipi_buffers is
 
 # Library
 
-/*
- * Copy the data from the respective shared memory block into 
- * a buffer.
- * 
- * @param buffer	destination buffer to copy the data to
- * @param buffer_size the size (in bytes) of the buffer
- *
- * */
+	/*
+	 * Copy the data from the respective shared memory block into a buffer.
+	 * 
+	 * @param buffer	destination buffer to copy the data to
+	 * @param buffer_size the size (in bytes) of the buffer
+	 *
+	 * */
 
     uint32_t CopyMem2Buffer(ipi_shmem_header_t* MsgBuffer, void* buffer, uint32_t buffer_size);
 
