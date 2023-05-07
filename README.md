@@ -185,6 +185,56 @@ So in shared_memory_setup.h, ipi_buffers is
     	             }
 	};
 
+# Example
+
+In baremetal
+
+	void generate_data_and_sent(...some_args...);
+
+	int main()
+	{
+	    init_platform();
+	
+		xil_printf("Test IPI Demo on %s\r\n", SENDER);
+
+		/*We setup a custom function to handle incoming messages*/
+		ipi_hander_wraper_t reader={.IpiHandler=message_hander_function};
+
+		/*We start the IPI system*/
+		start_ipi(&reader);
+
+	    while (1) {
+			/*we pass a function that generates data that need to be sent
+              to another processor in the system...
+            */
+    		Write2SharedMem(&ipi_buffers[TO_R51], WORD32_SIZE*32, populate_mem);
+
+			// or
+			
+			generate_data_and_sent(...some_args...);
+
+    		sleep(1);
+    	};
+
+	    cleanup_platform();
+
+	    return 0;
+	}
+
+	void generate_data_and_sent(...some_args...)
+	{
+		/*
+		proces data, and generate more data...
+		put that data in a buffer of size N (source_buffer, buffer_size respectively)
+		and sent it to the specific processor in the system
+		*/
+
+		WriteBuff2SharedMem(&ipi_buffers[TO_TARGET], source_buff, buffer_size);
+	}
+
+See directory microblaze for the definition of the functions used.
+
+
 # Library
 
 The function that will consume the message from another processor is
@@ -308,31 +358,6 @@ which return a structure:
 		const uint32_t data_length;
 	} buffer_data_t;
 
-# Example
-
-In baremetal
-
-	int main()
-	{
-	    init_platform();
-	
-		xil_printf("Test IPI Demo on %s\r\n", SENDER);
-
-		ipi_hander_wraper_t reader={.IpiHandler=PingPongTest};
-		start_ipi(&reader);
-
-	    while (1) {
-    		Write2SharedMem(&ipi_buffers[TO_R51], WORD32_SIZE*32, populate_mem);
-
-    		sleep(1);
-    	};
-
-	    cleanup_platform();
-
-	    return 0;
-	}
-
-See directory microblaze for the definition of the functions used.
 
 # Notes
 
